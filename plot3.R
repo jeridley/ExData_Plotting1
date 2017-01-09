@@ -1,0 +1,13 @@
+library(lubridate)
+powerData <- read.table("household_power_consumption.txt", sep=";", header = TRUE, na.strings = c("?",NA))
+powerData$Date <- as.Date(as.character(powerData$Date), format="%d/%m/%Y")
+subPowerData <- subset(powerData, Date>=as.Date("2007-02-1", format="%Y-%m-%d") & Date<=as.Date("2007-02-02", format="%Y-%m-%d"))
+datetime <- paste(as.character(subPowerData$Date),as.character(subPowerData$Time))
+with(subPowerData, plot(ymd_hms(datetime),Sub_metering_1, type="n", xlab = "datetime", ylab = "Energy sub meeting"))
+lines(ymd_hms(datetime),subPowerData$Sub_metering_1)
+lines(ymd_hms(datetime),subPowerData$Sub_metering_2, col="red")
+lines(ymd_hms(datetime),subPowerData$Sub_metering_3, col="blue")
+legend("topright",legend=c("Sub_meetering_1","Sub_meetering_2","Sub_meetering_3"), col=c("black","red","blue"),lty=c(1,1,1))
+dev.copy(png,file="plot3.png", width=480, height=480)
+dev.off()
+

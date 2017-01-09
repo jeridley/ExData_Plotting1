@@ -1,0 +1,10 @@
+
+library(lubridate)
+powerData <- read.table("household_power_consumption.txt", sep=";", header = TRUE, na.strings = c("?",NA))
+powerData$Date <- as.Date(as.character(powerData$Date), format="%d/%m/%Y")
+subPowerData <- subset(powerData, Date>=as.Date("2007-02-1", format="%Y-%m-%d") & Date<=as.Date("2007-02-02", format="%Y-%m-%d"))
+datetime <- paste(as.character(subPowerData$Date),as.character(subPowerData$Time))
+with(subPowerData, plot(ymd_hms(datetime),Global_active_power, type="n", xlab = "datetime", ylab = "Global Active Power (kilowatts)"))
+lines(ymd_hms(datetime),subPowerData$Global_active_power)
+dev.copy(png,file="plot2.png", width=480, height=480)
+dev.off()
